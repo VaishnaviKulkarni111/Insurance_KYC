@@ -1,4 +1,3 @@
-// src/store/fileUploadSlice.js
 
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
@@ -31,7 +30,7 @@ const UploadSlice = createSlice({
 });
 
 // Exporting actions
-export const { startUpload, uploadSuccess, uploadFailure } = fileUploadSlice.actions;
+export const { startUpload, uploadSuccess, uploadFailure } = UploadSlice.actions;
 
 // Thunk for handling file upload
 export const uploadFile = (file) => async (dispatch) => {
@@ -40,7 +39,7 @@ export const uploadFile = (file) => async (dispatch) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await axios.post('/api/upload', formData, {
+    const response = await axios.post('http://localhost:5000/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

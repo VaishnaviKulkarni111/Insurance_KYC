@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './AuthSlice'; 
-//import attendanceReducer from './attendanceSlice';
+import uploadReducer from './UploadSlice';
 //import dashboardReducer from './dashboardSlice'; 
 
 const store = configureStore({
   reducer: {
     auth: authReducer, 
-   
+    upload: uploadReducer
   },
 });
 
