@@ -49,7 +49,7 @@ export const loginUser = createAsyncThunk(
 // Async action for register
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ fname, email, password, userType }, { rejectWithValue }) => {
+  async ({ fname, email, password,mobile, userType }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');  
 
@@ -63,6 +63,7 @@ export const registerUser = createAsyncThunk(
           fname,
           email,
           password,
+          mobile,
           userType,
         }),
       });

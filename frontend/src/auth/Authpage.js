@@ -13,10 +13,11 @@ function Authpage() {
     email: '',
     password: '',
     fname: '',
+    mobile: '', // Added mobile field
     userType: '',
   });
 
-  useEffect(() => {
+  useEffect(() => { 
     if (token) {
       if (userType === 'admin') {
         navigate('/emp-dashboard');
@@ -39,6 +40,7 @@ function Authpage() {
       dispatch(registerUser({
         fname: formData.fname,
         email: formData.email,
+        mobile: formData.mobile, // Include mobile during registration
         password: formData.password,
         userType: formData.userType,
       }));
@@ -79,6 +81,20 @@ function Authpage() {
                     className="form-control"
                   />
                 </div>
+
+                {/* Mobile number input only for registration */}
+                {!isLogin && (
+                  <div className="mb-3">
+                    <input
+                      type="number"
+                      name="mobile"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      placeholder="Mobile Number"
+                      className="form-control"
+                    />
+                  </div>
+                )}
 
                 <div className="mb-3">
                   <input

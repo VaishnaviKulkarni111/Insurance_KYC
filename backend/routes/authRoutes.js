@@ -9,63 +9,70 @@ const JWT_SECRET = "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi782
 
 // Register route
 router.post("/register", async (req, res) => {
-  const { fname, email, password, userType } = req.body;
+  const { fname, email, password, mobile, userType } = req.body;
 
   const encryptedPassword = await bcrypt.hash(password, 10);
   try {
+    // Check if user already exists by email or mobile
     const oldUser = await User.findOne({ email });
+    const oldMobile = await User.findOne({ mobile });
 
-    if (oldUser) {
-      return res.json({ error: "User Exists" });
+    if (oldUser || oldMobile) {
+      return res.json({ error: "User with this email or mobile number already exists" });
     }
 
+    // Create the new user
     const user = await User.create({
       fname,
       email,
+      mobile,
       password: encryptedPassword,
       userType,
     });
 
+    // Generate JWT token
     const token = jwt.sign(
-      {  id: user._id, email: user.email, userType: user.userType },
+      { id: user._id, email: user.email, mobile: user.mobile, userType: user.userType },
       JWT_SECRET,
       { expiresIn: "2h" }
     );
 
     res.status(200).json({
-            status: "ok",
+      status: "ok",
       data: {
         token: token,
         userType: user.userType,
       },
     });
   } catch (error) {
+    console.error("Error in registration:", error);
     res.send({ status: "error" });
   }
 });
 
 // Login route
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { emailOrMobile, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    // Find user by email or mobile
+    const user = await User.findOne({
+      $or: [{ email: emailOrMobile }, { mobile: emailOrMobile }],
+    });
+
     if (!user) {
       return res.status(400).json({ status: "error", error: "Invalid credentials" });
     }
 
-    // Compare the hashed password with the entered one
-    const encryptedPassword = await bcrypt.hash(password, 10);
-
-    const isPasswordValid = await bcrypt.compare(password, encryptedPassword);
-      
-        if (!isPasswordValid) {
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(400).json({ status: "error", error: "Invalid credentials" });
     }
 
-    // Generate token and send response
+    // Generate JWT token
     const token = jwt.sign(
-      {  id: user._id, email: user.email, userType: user.userType },
+      { id: user._id, email: user.email, mobile: user.mobile, userType: user.userType },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -75,9 +82,11 @@ router.post("/login", async (req, res) => {
       data: { token, userType: user.userType },
     });
   } catch (error) {
+    console.error("Error in login:", error);
     res.status(500).json({ status: "error", error: "Login failed" });
   }
 });
+
 
 router.get("/getAllUser", async (req, res) => {
     try {
@@ -89,26 +98,6 @@ router.get("/getAllUser", async (req, res) => {
   });
 
 
-// Retrieve user data
 
-
-
-
-router.get('/:id', async (req, res) => {
-  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) { // Confirm valid MongoDB ObjectId
-    try {
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.status(200).json({ email: user.email });
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: 'Error fetching user' });
-    }
-  } else {
-    res.status(400).json({ message: 'Invalid user ID' });
-  }
-});
 
 module.exports = router;

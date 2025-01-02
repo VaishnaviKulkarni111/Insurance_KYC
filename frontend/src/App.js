@@ -6,9 +6,17 @@ import Authpage from './auth/Authpage';
 import UserDashboard from './UI/UserDashboard';
 import UploadDocs from './UI/UploadDocs';
 import UserVerification from './UI/UserVerification';
+import UserNavbar from './UI/Navbar';
 
 function App() {
-  return (
+  const userType = localStorage.getItem("userType")
+  const loggedIn = localStorage.getItem("loggedIn")
+  console.log(userType)
+  console.log(loggedIn)
+
+  return (<>
+     {   userType === "user" &&  loggedIn === "true" && <UserNavbar/> } 
+
     <Routes>
     <Route path="/" element={<HomePage />} />
     <Route path="/auth" element={<Authpage />} />
@@ -17,7 +25,10 @@ function App() {
     <Route path="/verify" element={<UserVerification />} />
 
 
-    </Routes>  );
+    </Routes> 
+    
+    </>
+ );
 }
 
 export default App;

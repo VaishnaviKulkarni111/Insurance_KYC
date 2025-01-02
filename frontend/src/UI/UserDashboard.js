@@ -10,7 +10,7 @@ function UserDashboard() {
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="m-5">
       <Row>
         <Col>
           <h2 className="text-center mb-4">Welcome to Your Dashboard</h2>
