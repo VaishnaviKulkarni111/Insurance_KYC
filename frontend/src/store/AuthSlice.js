@@ -13,7 +13,7 @@ const initialState = {
 // Async action for login
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ emailOrMobile, password }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');  
 
@@ -23,7 +23,7 @@ export const loginUser = createAsyncThunk(
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ emailOrMobile, password }),
       });
       const data = await response.json();
 

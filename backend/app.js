@@ -7,6 +7,8 @@ const cors = require("cors");
 const userRoutes = require("./routes/authRoutes");
  const uploadRoutes = require("./routes/docRoutes")
 const verifyRoutes = require("./routes/verifyRoutes")
+const otpRoutes = require("./routes/otpRoutes")
+
 app.use(express.json());
 app.use(cors());
 app.set("view engine", "ejs");
@@ -30,7 +32,9 @@ mongoose
 // Include user routes
 app.use(userRoutes);
 app.use( uploadRoutes);
-app.use( verifyRoutes)
+app.use( verifyRoutes);
+app.use( otpRoutes)
+
 app.listen(5000, () => {
   console.log("Server Started");
 });

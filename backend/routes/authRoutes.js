@@ -50,22 +50,23 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login route
 router.post("/login", async (req, res) => {
   const { emailOrMobile, password } = req.body;
 
   try {
+
     // Find user by email or mobile
     const user = await User.findOne({
       $or: [{ email: emailOrMobile }, { mobile: emailOrMobile }],
-    });
+    }); 
 
     if (!user) {
       return res.status(400).json({ status: "error", error: "Invalid credentials" });
     }
 
-    // Validate password
+    // Compare the hashed password stored in the database with the provided password
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
       return res.status(400).json({ status: "error", error: "Invalid credentials" });
     }
@@ -86,6 +87,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ status: "error", error: "Login failed" });
   }
 });
+
 
 
 router.get("/getAllUser", async (req, res) => {

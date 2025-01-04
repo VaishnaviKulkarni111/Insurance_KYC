@@ -8,12 +8,12 @@ function Authpage() {
   const navigate = useNavigate();
   const { loading, error, token, userType } = useSelector((state) => state.auth);
 
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     fname: '',
-    mobile: '', // Added mobile field
+    mobile: '',
     userType: '',
   });
 
@@ -35,12 +35,12 @@ function Authpage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      dispatch(loginUser({ email: formData.email, password: formData.password }));
+      dispatch(loginUser({ emailOrMobile: formData.email, password: formData.password }));
     } else {
       dispatch(registerUser({
         fname: formData.fname,
         email: formData.email,
-        mobile: formData.mobile, // Include mobile during registration
+        mobile: formData.mobile, 
         password: formData.password,
         userType: formData.userType,
       }));

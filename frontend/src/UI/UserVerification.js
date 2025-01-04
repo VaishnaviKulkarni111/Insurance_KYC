@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
-import { Container, Row, Col, Card, Badge, Button, Form, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Spinner } from 'react-bootstrap';
 import { FaCheckCircle, FaTimesCircle, FaEnvelope, FaMobileAlt, FaFileAlt } from 'react-icons/fa';
-import { fetchUserDetails } from '../store/VerifySlice';
+import { fetchUserDetails, sendVerificationEmail, sendOTP } from '../store/VerifySlice';
 
-const UserVerification = ({  emailVerified, mobileVerified, documents, loading, handleResendEmail, handleResendSMS }) => {
-  const { email, mobile, loading: userLoading, error } = useSelector((state) => state.verify);
+const UserVerification = ({ emailVerified, mobileVerified, documents, loading }) => {
+  const { email, mobile, loading: userLoading, emailSent } = useSelector((state) => state.verify);
 
-  console.log("email", email)
- const dispatch = useDispatch();
-   useEffect(() => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
     dispatch(fetchUserDetails());
-  }, [dispatch]);
+  }, [dispatch]);  
+
+  // Handle the email resend action
+  const handleResendEmail = () => {
+    dispatch(sendVerificationEmail());
+  };
+
+  const handleSendOTP = () =>{
+    dispatch(sendOTP(mobile));
+  }
 
   return (
     <Container fluid className="py-5 mt-4" style={{ backgroundColor: '#f9f9f9' }}>
@@ -64,10 +72,10 @@ const UserVerification = ({  emailVerified, mobileVerified, documents, loading, 
                                 variant="outline-primary"
                                 size="sm"
                                 onClick={handleResendEmail}
-                                disabled={loading}
+                                disabled={userLoading || emailSent}
                                 className="mt-2"
                               >
-                                {loading ? <Spinner animation="border" size="sm" /> : 'Resend Email'}
+                                {userLoading ? <Spinner animation="border" size="sm" /> : emailSent ? 'Email Sent' : 'Resend Email'}
                               </Button>
                             </>
                           )}
@@ -95,7 +103,7 @@ const UserVerification = ({  emailVerified, mobileVerified, documents, loading, 
                               <Button
                                 variant="outline-primary"
                                 size="sm"
-                                onClick={handleResendSMS}
+                                onClick={handleSendOTP}
                                 disabled={loading}
                                 className="mt-2"
                               >
