@@ -87,7 +87,7 @@ router.get('/user-details', async (req, res) => {
     const userId = decoded.id;
 
     // Fetch user details from database
-    const user = await User.findById(userId).select('email mobile');
+    const user = await User.findById(userId).select('email mobile emailVerified mobileVerified');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -96,6 +96,8 @@ router.get('/user-details', async (req, res) => {
     res.status(200).json({
       email: user.email,
       mobile: user.mobile,
+      emailVerified: user.emailVerified,
+      mobileVerified: user.mobileVerified,
     });
   } catch (err) {
     console.error(err.message);

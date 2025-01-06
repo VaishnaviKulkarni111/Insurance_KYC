@@ -13,7 +13,7 @@ export const fetchUserDetails = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
+      console.log("data in redux",response.data);
       return response.data; // { email, mobile }
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch user details');
@@ -66,6 +66,18 @@ export const sendOTP = createAsyncThunk(
   }
 );
 
+export const verifyOtp = createAsyncThunk(
+  'otp/verifyOtp',
+  async ({ mobile, otp }, { rejectWithValue }) => {
+      try {
+          const response = await axios.post('http://localhost:5000/verify-otp', { mobile, otp });
+          return response.data;
+      } catch (error) {
+          return rejectWithValue(error.response.data);
+      }
+  }
+);
+
 
 const VerifySlice = createSlice({
   name: 'userDetails',
@@ -74,9 +86,16 @@ const VerifySlice = createSlice({
     mobile: '',
     loading: false,
     error: null,
-    emailSent: false, // To track if the email has been sent
+    emailSent: false, 
+    emailVerified: false,
+    mobileVerified: false,
+    otpVerificationSuccess: false,
   },
-  reducers: {},
+  reducers: {
+    resetOtpVerification: (state) => {
+      state.otpVerificationSuccess = false; // Reset success flag
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserDetails.pending, (state) => {
@@ -87,6 +106,8 @@ const VerifySlice = createSlice({
         state.loading = false;
         state.email = action.payload.email;
         state.mobile = action.payload.mobile;
+        state.emailVerified = action.payload.emailVerified;
+        state.mobileVerified = action.payload.mobileVerified;
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {
         state.loading = false;
@@ -119,10 +140,26 @@ const VerifySlice = createSlice({
       .addCase(sendOTP.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload; // Error message
-      });
+      })
+      .addCase(verifyOtp.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+    })
+    .addCase(verifyOtp.fulfilled, (state) => {
+        state.loading = false;
+        state.mobileVerified = true;
+        state.otpVerificationSuccess = true; // Set success flag
+
+        state.error = null;
+    })
+    .addCase(verifyOtp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    });
       
   },
 });
 
+export const { resetOtpVerification } = VerifySlice.actions; // Ensure this is exported
 
 export default VerifySlice.reducer;

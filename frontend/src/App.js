@@ -11,8 +11,6 @@ import UserNavbar from './UI/Navbar';
 function App() {
   const userType = localStorage.getItem("userType")
   const loggedIn = localStorage.getItem("loggedIn")
-  console.log(userType)
-  console.log(loggedIn)
 
   return (<>
      {   userType === "user" &&  loggedIn === "true" && <UserNavbar/> } 

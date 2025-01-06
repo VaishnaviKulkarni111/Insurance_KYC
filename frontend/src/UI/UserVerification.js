@@ -1,26 +1,53 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Row, Col, Card, Badge, Button, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Spinner, Form } from 'react-bootstrap';
 import { FaCheckCircle, FaTimesCircle, FaEnvelope, FaMobileAlt, FaFileAlt } from 'react-icons/fa';
-import { fetchUserDetails, sendVerificationEmail, sendOTP } from '../store/VerifySlice';
+import { fetchUserDetails, sendVerificationEmail, sendOTP, verifyOtp, resetOtpVerification } from '../store/VerifySlice';
 
-const UserVerification = ({ emailVerified, mobileVerified, documents, loading }) => {
-  const { email, mobile, loading: userLoading, emailSent } = useSelector((state) => state.verify);
+const UserVerification = () => {
+  const {
+    email,
+    mobile,
+    emailVerified,
+    mobileVerified,
+    documents,
+    loading,
+    emailSent,
+    otpVerificationLoading,
+    otpVerificationSuccess,
+  } = useSelector((state) => state.verify);
+
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(fetchUserDetails());
-  }, [dispatch]);  
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (otpVerificationSuccess) {
+      const timeout = setTimeout(() => {
+        dispatch(resetOtpVerification());
+      }, 3000); // Reset success message after 3 seconds
+      return () => clearTimeout(timeout);
+    }
+  }, [otpVerificationSuccess, dispatch]);
 
   // Handle the email resend action
   const handleResendEmail = () => {
     dispatch(sendVerificationEmail());
   };
 
-  const handleSendOTP = () =>{
+  const handleSendOTP = () => {
     dispatch(sendOTP(mobile));
-  }
+    setOtpSent(true); // Set flag when OTP is sent
+  };
+
+  const handleVerifyOTP = () => {
+    dispatch(verifyOtp({ mobile, otp }));
+  };
 
   return (
     <Container fluid className="py-5 mt-4" style={{ backgroundColor: '#f9f9f9' }}>
@@ -72,10 +99,16 @@ const UserVerification = ({ emailVerified, mobileVerified, documents, loading })
                                 variant="outline-primary"
                                 size="sm"
                                 onClick={handleResendEmail}
-                                disabled={userLoading || emailSent}
+                                disabled={loading || emailSent}
                                 className="mt-2"
                               >
-                                {userLoading ? <Spinner animation="border" size="sm" /> : emailSent ? 'Email Sent' : 'Resend Email'}
+                                {loading ? (
+                                  <Spinner animation="border" size="sm" />
+                                ) : emailSent ? (
+                                  'Email Sent'
+                                ) : (
+                                  'Resend Email'
+                                )}
                               </Button>
                             </>
                           )}
@@ -100,15 +133,47 @@ const UserVerification = ({ emailVerified, mobileVerified, documents, loading })
                               <Badge bg="danger" className="px-3 py-2 mb-2">
                                 <FaTimesCircle className="me-1" /> Not Verified
                               </Badge>
-                              <Button
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={handleSendOTP}
-                                disabled={loading}
-                                className="mt-2"
-                              >
-                                {loading ? <Spinner animation="border" size="sm" /> : 'Resend SMS'}
-                              </Button>
+                              {!otpSent && (
+                                <Button
+                                  variant="outline-primary"
+                                  size="sm"
+                                  onClick={handleSendOTP}
+                                  disabled={loading}
+                                  className="mt-2"
+                                >
+                                  {loading ? (
+                                    <Spinner animation="border" size="sm" />
+                                  ) : (
+                                    'Resend SMS'
+                                  )}
+                                </Button>
+                              )}
+                              {otpSent && (
+                                <div className="mt-3">
+                                  <Form.Control
+                                    type="text"
+                                    placeholder="Enter OTP"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    className="mb-2"
+                                  />
+                                  <Button
+                                    variant="outline-success"
+                                    size="sm"
+                                    onClick={handleVerifyOTP}
+                                    disabled={otpVerificationLoading}
+                                  >
+                                    {otpVerificationLoading ? (
+                                      <Spinner animation="border" size="sm" />
+                                    ) : (
+                                      'Verify OTP'
+                                    )}
+                                  </Button>
+                                </div>
+                              )}
+                              {otpVerificationSuccess && (
+                                <p className="text-success mt-2">OTP Verified Successfully!</p>
+                              )}
                             </>
                           )}
                         </div>
@@ -131,7 +196,12 @@ const UserVerification = ({ emailVerified, mobileVerified, documents, loading })
                             <FaFileAlt className="me-3" style={{ fontSize: '1.8rem', color: '#1e88e5' }} />
                             <div>
                               <h6 className="mb-1">Document {index + 1}</h6>
-                              <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-primary">
+                              <a
+                                href={doc.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary"
+                              >
                                 View Document
                               </a>
                             </div>

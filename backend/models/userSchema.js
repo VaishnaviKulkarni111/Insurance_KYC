@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema(
       unique: true,
       match: [/^\d{10}$/, "Please enter a valid 10-digit mobile number"], // Regex for 10-digit numbers
     },
+    mobileVerified: { type: Boolean, default: false },
+
     emailVerified: { type: Boolean, default: false }, // New field
   emailVerificationToken: { type: String },         // Token for email verification
   emailVerificationExpires: { type: Date },        // Token expiry time
