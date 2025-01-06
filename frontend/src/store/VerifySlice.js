@@ -42,6 +42,19 @@ export const sendVerificationEmail = createAsyncThunk(
   }
 );
 
+export const verifyEmail = createAsyncThunk(
+  'userDetails/verifyEmail',
+  async (token, { rejectWithValue }) => {
+    try {
+      // Send a GET request to the backend to verify the email
+      const response = await axios.get(`http://localhost:5000/verify-email/${token}`);
+      return response.data;  // Return success message or updated user data
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to verify email');
+    }
+  }
+);
+
 export const sendOTP = createAsyncThunk(
   'verify/sendOTP',
   async (mobileNumber, { rejectWithValue }) => {
@@ -126,6 +139,18 @@ const VerifySlice = createSlice({
       .addCase(sendVerificationEmail.rejected, (state, action) => {
         state.loading = false;
         state.emailSent = false;
+        state.error = action.payload;
+      })
+      .addCase(verifyEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.emailVerified = true; // Update the email verification status
+      })
+      .addCase(verifyEmail.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
       .addCase(sendOTP.pending, (state) => {

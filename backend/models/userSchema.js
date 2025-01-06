@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: [/^\d{10}$/, "Please enter a valid 10-digit mobile number"], // Regex for 10-digit numbers
+      match: [/^\+?\d{10,15}$/, "Please enter a valid mobile number"], // Allows country codes
     },
     mobileVerified: { type: Boolean, default: false },
 

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadFile } from '../store/UploadSlice';
+import { uploadFile, fetchUploadedDocuments } from '../store/UploadSlice';
 import { Button, Form, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
-import { FaUpload, FaFileImage, FaIdCard } from 'react-icons/fa';
+import { FaUpload, FaFileImage, FaIdCard, FaFileAlt } from 'react-icons/fa';
 
 const UploadDocs = () => {
   const dispatch = useDispatch();
-  const { loading, fileUrl, error } = useSelector((state) => state.upload);
+  const { loading, fileUrl, error, documents } = useSelector((state) => state.upload);
+  console.log("documents for screen", documents)
 
   const [selectedFiles, setSelectedFiles] = useState({
     photo: null,
@@ -29,6 +30,11 @@ const UploadDocs = () => {
       dispatch(uploadFile(selectedFiles.idCard));
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchUploadedDocuments());
+  }, [dispatch]);
+
 
   return (
     <Container fluid className="p-0">
@@ -128,6 +134,37 @@ const UploadDocs = () => {
           </Col>
         </Row>
       </div>
+       {/* Uploaded Documents Section */}
+       <div className="mt-4">
+                <h5 className="text-center">Uploaded Documents</h5>
+                <hr />
+                {documents && documents.length > 0 ? (
+                  <Row>
+                    {documents.map((doc, index) => (
+                      <Col md={6} key={index} className="mb-4">
+                        <Card className="border-0 shadow-sm">
+                          <Card.Body className="d-flex align-items-center">
+                            <FaFileAlt className="me-3" style={{ fontSize: '1.8rem', color: '#1e88e5' }} />
+                            <div>
+                              <h6 className="mb-1">Document {index + 1}</h6>
+                              <a
+                                href={doc.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary"
+                              >
+                                View Document
+                              </a>
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <p className="text-muted text-center">No documents uploaded yet.</p>
+                )}
+              </div>
     </Container>
   );
 };

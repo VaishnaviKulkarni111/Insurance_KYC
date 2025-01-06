@@ -1,36 +1,15 @@
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
   loading: false,
   fileUrl: null,
+  documents: [],
   error: null,
 };
 
-// Creating the fileUpload slice
-const UploadSlice = createSlice({
-  name: 'fileUpload',
-  initialState,
-  reducers: {
-    startUpload: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    uploadSuccess: (state, action) => {
-      state.loading = false;
-      state.fileUrl = action.payload;
-      state.error = null;
-    },
-    uploadFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-  },
-});
 
-// Exporting actions
-export const { startUpload, uploadSuccess, uploadFailure } = UploadSlice.actions;
 
 // Thunk for handling file upload
 export const uploadFile = (file) => async (dispatch) => {
@@ -51,5 +30,61 @@ export const uploadFile = (file) => async (dispatch) => {
   }
 };
 
+export const fetchUploadedDocuments = createAsyncThunk(
+  'upload/fetchUploadedDocuments',
+  async (_, { getState, rejectWithValue }) => {
+    const token = localStorage.getItem('token'); // Get token for authentication
+    try {
+      const response = await axios.get('http://localhost:5000/files', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("show files data", response.data)
+      return response.data.files; // Return files array
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch files');
+    }
+  }
+);
+
+// Creating the fileUpload slice
+const UploadSlice = createSlice({
+  name: 'fileUpload',
+  initialState,
+  reducers: {
+    startUpload: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    uploadSuccess: (state, action) => {
+      state.loading = false;
+      state.fileUrl = action.payload;
+      state.error = null;
+    },
+    uploadFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUploadedDocuments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUploadedDocuments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.documents = action.payload;
+      })
+      .addCase(fetchUploadedDocuments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
 // Exporting reducer
 export default UploadSlice.reducer;
+
+export const { startUpload, uploadSuccess, uploadFailure } = UploadSlice.actions;
+

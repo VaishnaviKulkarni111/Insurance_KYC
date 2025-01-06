@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Row, Col, Card, Badge, Button, Spinner, Form } from 'react-bootstrap';
-import { FaCheckCircle, FaTimesCircle, FaEnvelope, FaMobileAlt, FaFileAlt } from 'react-icons/fa';
-import { fetchUserDetails, sendVerificationEmail, sendOTP, verifyOtp, resetOtpVerification } from '../store/VerifySlice';
+import { FaCheckCircle, FaTimesCircle, FaEnvelope, FaMobileAlt } from 'react-icons/fa';
+import { fetchUserDetails, sendVerificationEmail,verifyEmail, sendOTP, verifyOtp, resetOtpVerification } from '../store/VerifySlice';
+import { useParams } from 'react-router-dom';
 
 const UserVerification = () => {
   const {
@@ -10,7 +11,6 @@ const UserVerification = () => {
     mobile,
     emailVerified,
     mobileVerified,
-    documents,
     loading,
     emailSent,
     otpVerificationLoading,
@@ -21,10 +21,17 @@ const UserVerification = () => {
   const [otpSent, setOtpSent] = useState(false);
 
   const dispatch = useDispatch();
+  const { token } = useParams(); // Retrieve the email verification token from the URL
 
   useEffect(() => {
     dispatch(fetchUserDetails());
   }, [dispatch]);
+ 
+  useEffect(() => {
+    if (token) {
+      dispatch(verifyEmail(token));
+    }
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (otpVerificationSuccess) {
@@ -51,7 +58,7 @@ const UserVerification = () => {
 
   return (
     <Container fluid className="py-5 mt-4" style={{ backgroundColor: '#f9f9f9' }}>
-      <Row className="justify-content-center">
+     <Row className="justify-content-center">
         <Col md={8}>
           <Card className="shadow-lg">
             <Card.Header className="bg-primary text-white text-center">
@@ -183,37 +190,7 @@ const UserVerification = () => {
                 </Row>
               </div>
 
-              {/* Uploaded Documents Section */}
-              <div className="mt-4">
-                <h5 className="text-center">Uploaded Documents</h5>
-                <hr />
-                {documents && documents.length > 0 ? (
-                  <Row>
-                    {documents.map((doc, index) => (
-                      <Col md={6} key={index} className="mb-4">
-                        <Card className="border-0 shadow-sm">
-                          <Card.Body className="d-flex align-items-center">
-                            <FaFileAlt className="me-3" style={{ fontSize: '1.8rem', color: '#1e88e5' }} />
-                            <div>
-                              <h6 className="mb-1">Document {index + 1}</h6>
-                              <a
-                                href={doc.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary"
-                              >
-                                View Document
-                              </a>
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                ) : (
-                  <p className="text-muted text-center">No documents uploaded yet.</p>
-                )}
-              </div>
+             
             </Card.Body>
           </Card>
         </Col>

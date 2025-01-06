@@ -7,6 +7,7 @@ import UserDashboard from './UI/UserDashboard';
 import UploadDocs from './UI/UploadDocs';
 import UserVerification from './UI/UserVerification';
 import UserNavbar from './UI/Navbar';
+import VerifyEmail from './UI/VerifyEmail';
 
 function App() {
   const userType = localStorage.getItem("userType")
@@ -21,6 +22,7 @@ function App() {
     <Route path="/user-board" element={<UserDashboard />} />
     <Route path="/upload" element={<UploadDocs />} />
     <Route path="/verify" element={<UserVerification />} />
+    <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
 
     </Routes> 
