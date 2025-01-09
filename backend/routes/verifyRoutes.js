@@ -14,7 +14,7 @@ router.post('/send-verification-email', async (req, res) => {
 
     const decoded = jwt.verify(token, JWT_SECRET);
     const userId = decoded.id;
-
+         
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 

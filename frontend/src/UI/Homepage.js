@@ -11,10 +11,10 @@ const HomePage = () => {
               <img src="https://play-lh.googleusercontent.com/C-lJxz2nVLL8vBli0TXRYMTR4H3X58WaFtdxF7EgYZAVzSJ90D69hFFHtKBoAmnhUopW" alt="Company Logo" style={{ height: "50px" }} />
             </Col>
             <Col xs={12} sm={6} className="text-right">
-              <Button variant="primary" className="mr-2">
+              <Button variant="primary" className="mr-2" href="/auth">
                 Login
               </Button>
-              <Button variant="outline-primary">Register</Button>
+              <Button variant="outline-primary" href="/auth">Register</Button>
             </Col>
           </Row>
         </Container>

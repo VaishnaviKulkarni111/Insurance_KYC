@@ -13,6 +13,8 @@ const initialState = {
 
 // Thunk for handling file upload
 export const uploadFile = (file) => async (dispatch) => {
+  const token = localStorage.getItem('token'); // Or however you store the JWT
+  
   dispatch(startUpload());
   try {
     const formData = new FormData();
@@ -20,9 +22,11 @@ export const uploadFile = (file) => async (dispatch) => {
 
     const response = await axios.post('http://localhost:5000/upload', formData, {
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
       },
     });
+    console.log('File uploaded successfully:', response.data);
 
     dispatch(uploadSuccess(response.data.fileUrl)); // Assuming your backend sends the file URL
   } catch (error) {

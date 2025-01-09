@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { uploadFile, fetchUploadedDocuments } from '../store/UploadSlice';
 import { Button, Form, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { FaUpload, FaFileImage, FaIdCard, FaFileAlt } from 'react-icons/fa';
-
+   
 const UploadDocs = () => {
   const dispatch = useDispatch();
   const { loading, fileUrl, error, documents } = useSelector((state) => state.upload);

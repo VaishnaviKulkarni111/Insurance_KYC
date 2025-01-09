@@ -9,18 +9,19 @@ const {s3} = require('../config/awsConfig');
 // Configure multer for memory storage
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', authenticate, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
+    console.log("req while uploading file", req.user)
+    const userId = req.user._id; // Ensure this is fetched from the authenticated user
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `${Date.now()}_${req.file.originalname}`, // Unique file name
+      Key: `${userId}/${Date.now()}_${req.file.originalname}`, // Unique file name
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
-      ACL: 'private', // Change to 'public-read' if needed
     };
 
     const command = new PutObjectCommand(params);
