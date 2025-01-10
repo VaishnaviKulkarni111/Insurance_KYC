@@ -8,6 +8,7 @@ const userRoutes = require("./routes/authRoutes");
  const uploadRoutes = require("./routes/docRoutes")
 const verifyRoutes = require("./routes/verifyRoutes")
 const otpRoutes = require("./routes/otpRoutes")
+const adminRoutes = require("./routes/adminRoutes")
 
 app.use(express.json());
 app.use(cors());
@@ -33,7 +34,8 @@ mongoose
 app.use(userRoutes);
 app.use( uploadRoutes);
 app.use( verifyRoutes);
-app.use( otpRoutes)
+app.use( otpRoutes);
+app.use(adminRoutes)
 
 app.listen(5000, () => {
   console.log("Server Started");

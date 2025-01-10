@@ -21,7 +21,6 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    console.log('Authenticated user:', req.user); // Debug log
     next();
   } catch (error) {
     console.error('JWT verification error:', error.message);
@@ -29,4 +28,5 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = authenticate;
+
+module.exports = authenticate ;

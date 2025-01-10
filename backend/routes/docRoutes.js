@@ -1,8 +1,11 @@
 const express = require('express');
 const multer = require('multer');
-const { S3Client, PutObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const {  PutObjectCommand, ListObjectsV2Command, GetObjectCommand } = require('@aws-sdk/client-s3');
 const router = express.Router();
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
 const authenticate = require('../config/authMiddleware');
+console.log('authenticate in docroute:', authenticate); // Should log the function definition
 
 const {s3} = require('../config/awsConfig');
 
@@ -14,7 +17,6 @@ router.post('/upload', authenticate, upload.single('file'), async (req, res) => 
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    console.log("req while uploading file", req.user)
     const userId = req.user._id; // Ensure this is fetched from the authenticated user
 
     const params = {
@@ -36,43 +38,53 @@ router.post('/upload', authenticate, upload.single('file'), async (req, res) => 
 });
 
 
-router.get('/files',authenticate, async (req, res) => {
+router.get('/files', authenticate, async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming you have user authentication and can access req.user.id
-    console.log('Fetching files for user ID:', userId);
-    console.log('Authenticated user:', req.user);
+    const userId = req.user._id; // Assuming you have user authentication
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Prefix: `${userId}/`, // Assuming user files are stored in folders named by userId
     };
-    console.log('S3 ListObjectsV2Command params:', params);
 
     const command = new ListObjectsV2Command(params);
     const data = await s3.send(command);
-
-    console.log('Raw data received from S3:', JSON.stringify(data, null, 2));
 
     if (!data.Contents || data.Contents.length === 0) {
       console.log('No files found in the S3 bucket for this user.');
       return res.status(200).json({ message: 'No files found', files: [] });
     }
 
-    // Map the file data to include only the necessary details
-    const files = data.Contents.map((item) => ({
-      fileName: item.Key.split('/').pop(), // Get the file name
-      fileUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${item.Key}`,
-      size: item.Size, // File size in bytes
-      lastModified: item.LastModified, // Last modified date
-    }));
+    // Generate pre-signed URLs for the files
+    const files = await Promise.all(
+      data.Contents.map(async (item) => {
+        const fileKey = item.Key;
 
-    console.log('Formatted file list:', JSON.stringify(files, null, 2));
+        // Generate a pre-signed URL for each file
+        const getObjectCommand = new GetObjectCommand({
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: fileKey,
+        });
+
+        const preSignedUrl = await getSignedUrl(s3, getObjectCommand, { expiresIn: 3600 }); // URL valid for 1 hour
+
+        return {
+          fileName: fileKey.split('/').pop(),
+          fileUrl: preSignedUrl, // Use the pre-signed URL
+          size: item.Size,
+          lastModified: item.LastModified,
+        };
+      })
+    );
+
+    // console.log('Formatted file list:', JSON.stringify(files, null, 2));
     res.status(200).json({ message: 'Files retrieved successfully', files });
   } catch (error) {
     console.error('Error fetching files:', error);
     res.status(500).json({ message: 'Failed to fetch files', error: error.message });
   }
 });
+
 
 
 module.exports = router;

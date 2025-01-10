@@ -20,7 +20,7 @@ function Authpage() {
   useEffect(() => { 
     if (token) {
       if (userType === 'admin') {
-        navigate('/emp-dashboard');
+        navigate('/admin');
       } else if (userType === 'user') {
         navigate('/user-board');
       }
