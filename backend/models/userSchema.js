@@ -13,10 +13,13 @@ const userSchema = new mongoose.Schema(
     },
     mobileVerified: { type: Boolean, default: false },
 
-    emailVerified: { type: Boolean, default: false }, // New field
-  emailVerificationToken: { type: String },         // Token for email verification
-  emailVerificationExpires: { type: Date },        // Token expiry time
+    emailVerified: { type: Boolean, default: false }, 
+  emailVerificationToken: { type: String },         
+  emailVerificationExpires: { type: Date },       
     userType: { type: String, default: "User" },
+    submission:{type: String, default: "Not Started", enum: ["Not Started", "Submitted"]},
+    status: { type: String, default: "Pending", enum: ["Pending", "In Review", "Approved", "Rejected"] },
+
   },
   {
     collection: "Users-KYC", 

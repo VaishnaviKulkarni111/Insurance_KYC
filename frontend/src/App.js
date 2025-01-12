@@ -10,6 +10,7 @@ import UserNavbar from './UI/Navbar';
 import VerifyEmail from './UI/VerifyEmail';
 import Dashboard from './admin/Dashboard';
 import Userlist from './admin/Userlist';
+import UserDetails from './admin/UserDetails';
 
 function App() {
   const userType = localStorage.getItem("userType")
@@ -27,6 +28,7 @@ function App() {
     <Route path="/verify-email/:token" element={<VerifyEmail />} />
     <Route path="/admin" element={<Dashboard />} />
     <Route path="/userlist" element={<Userlist />} />
+    <Route path="/user-details/:userId" element={<UserDetails />} />
 
 
     </Routes> 
