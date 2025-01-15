@@ -11,6 +11,7 @@ import VerifyEmail from './UI/VerifyEmail';
 import Dashboard from './admin/Dashboard';
 import Userlist from './admin/Userlist';
 import UserDetails from './admin/UserDetails';
+import PolicyPage from './UI/PolicyPage';
 
 function App() {
   const userType = localStorage.getItem("userType")
@@ -29,6 +30,7 @@ function App() {
     <Route path="/admin" element={<Dashboard />} />
     <Route path="/userlist" element={<Userlist />} />
     <Route path="/user-details/:userId" element={<UserDetails />} />
+    <Route path="/policy" element={<PolicyPage />} />
 
 
     </Routes> 

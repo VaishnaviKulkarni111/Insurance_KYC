@@ -1,24 +1,76 @@
 import React from "react";
 import { Container, Row, Col, Button, Card, Image } from "react-bootstrap";
-
+import Partners from "./Partners";
+import Footer from "./Footer";
+import Products from "./Products";
+import Statistics from "./Statistics";
 const HomePage = () => {
   return (
     <div style={{ backgroundColor: "#f4f6f9", minHeight: "100vh" }}>
-      <header className="py-4">
-        <Container>
-          <Row>
-            <Col xs={12} sm={6}>
-              <img src="https://play-lh.googleusercontent.com/C-lJxz2nVLL8vBli0TXRYMTR4H3X58WaFtdxF7EgYZAVzSJ90D69hFFHtKBoAmnhUopW" alt="Company Logo" style={{ height: "50px" }} />
-            </Col>
-            <Col xs={12} sm={6} className="text-right">
-              <Button variant="primary" className="mr-2" href="/auth">
-                Login
-              </Button>
-              <Button variant="outline-primary" href="/auth">Register</Button>
-            </Col>
-          </Row>
-        </Container>
-      </header>
+     <header className="py-4">
+  <Container>
+    <Row className="align-items-center">
+      {/* Logo Section */}
+      <Col xs={12} sm={4}>
+        <img
+          src="https://play-lh.googleusercontent.com/C-lJxz2nVLL8vBli0TXRYMTR4H3X58WaFtdxF7EgYZAVzSJ90D69hFFHtKBoAmnhUopW"
+          alt="Company Logo"
+          style={{ height: "50px" }}
+        />
+      </Col>
+
+      {/* Navigation Links */}
+      <Col xs={12} sm={4} className="text-center">
+        <nav>
+          <a
+            href="#about"
+            style={{
+              textDecoration: "none",
+              color: "#007bff",
+              margin: "0 15px",
+              fontWeight: "bold",
+            }}
+          >
+            About
+          </a>
+          <a
+            href="#contact"
+            style={{
+              textDecoration: "none",
+              color: "#007bff",
+              margin: "0 15px",
+              fontWeight: "bold",
+            }}
+          >
+            Contact Us
+          </a>
+          <a
+            href="#contact"
+            style={{
+              textDecoration: "none",
+              color: "#007bff",
+              margin: "0 15px",
+              fontWeight: "bold",
+            }}
+          >
+             Try Premium
+          </a>
+        </nav>
+      </Col>
+
+      {/* Login and Register Buttons */}
+      <Col xs={12} sm={4} className="text-right">
+        <Button variant="primary" className="me-3" href="/auth">
+          Login
+        </Button>
+        <Button variant="outline-primary" href="/auth">
+          Register
+        </Button>
+      </Col>
+    </Row>
+  </Container>
+</header>
+
 
       <section className="py-5">
         <Container>
@@ -37,11 +89,17 @@ const HomePage = () => {
               </Button>
             </Col>
             <Col md={6}>
-              <Image src="https://s3.ap-southeast-1.amazonaws.com/images.asianage.com/images/aa-Cover-u0b349upqugfio195s4lpk8144-20190502143949.Medi.jpeg" fluid alt="KYC Process" />
+              <Image src="https://www.hdfclife.com/content/dam/hdfclifeinsurancecompany/knowledge-center/images/about-life-insurance/difference-between-life-and-health-insurance.jpg" fluid alt="KYC Process" />
             </Col>
           </Row>
         </Container>
       </section>
+
+      <Statistics />
+      <Products />
+
+      <Partners />
+
 
       <section className="bg-light py-5">
         <Container>
@@ -84,15 +142,7 @@ const HomePage = () => {
         </Container>
       </section>
 
-      <footer className="bg-dark text-white py-4">
-        <Container>
-          <Row>
-            <Col className="text-center">
-              <p>&copy; {new Date().getFullYear()} Your Insurance Company</p>
-            </Col>
-          </Row>
-        </Container>
-      </footer>
+      <Footer/>
     </div>
   );
 };

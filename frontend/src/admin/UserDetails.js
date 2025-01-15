@@ -90,34 +90,64 @@ const UserDetails = () => {
         </Col>
         <Col md={6}>
          <Card className="shadow mb-4">
-  <Card.Body>
-    <h5>Uploaded Documents</h5>
-    {userFiles && userFiles.length > 0 ? (  // Check if userFiles exists and is an array
-      <ul>
-        {userFiles.map((file, index) => (
-          <li key={index}>
-            <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
-              {file.fileName}
-            </a> 
-            <p>
-              <small>Size: {(file.size / 1024).toFixed(2)} KB</small>
-            </p>
-            <p>
-              <small>Uploaded: {new Date(file.lastModified).toLocaleString()}</small>
-            </p>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No documents uploaded</p>
-    )}
-  </Card.Body>
+         <Card.Body>
+      <h5>Uploaded Documents</h5>
+      {userFiles && userFiles.length > 0 ? ( // Check if userFiles exists and is an array
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Document</th>
+              <th>Size</th>
+              <th>Uploaded On</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userFiles.map((file, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>
+                  {file.fileName.toLowerCase().includes('photo') ? (
+                    <i className="bi bi-person-circle" style={{ fontSize: '1.5rem' }}></i>
+                  ) : file.fileName.toLowerCase().includes('id') ? (
+                    <i className="bi bi-file-earmark-text" style={{ fontSize: '1.5rem' }}></i>
+                  ) : (
+                    <i className="bi bi-file-earmark" style={{ fontSize: '1.5rem' }}></i>
+                  )}
+                </td>
+                <td>
+                  <a
+                    href={file.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: '#1e88e5' }}
+                  >
+                    {file.fileName}
+                  </a>
+                </td>
+                <td>{(file.size / 1024).toFixed(2)} KB</td>
+                <td>{new Date(file.lastModified).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p>No documents uploaded</p>
+      )}
+    </Card.Body>
 </Card>
 
 
-<div className="d-flex justify-content-between mt-3">
+
+        </Col>
+      </Row>
+      <Row>
+
+      <div className="d-flex  mt-3">
   <Button
     variant="success"
+     className="me-3"
     onClick={() => handleStatusUpdate('Approved')}
   >
     Approve
@@ -129,8 +159,6 @@ const UserDetails = () => {
     Reject
   </Button>
 </div>
-
-        </Col>
       </Row>
     </Container>
   );

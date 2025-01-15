@@ -34,6 +34,9 @@ const UserNavbar = () => {
             <Nav.Link href="/upload" className="text-white fw-bold">
               Upload
             </Nav.Link>
+            <Nav.Link href="/policy" className="text-white fw-bold">
+              Policies
+            </Nav.Link>
             <Nav.Link href="/verify" className="text-white fw-bold">
               Verify
             </Nav.Link>

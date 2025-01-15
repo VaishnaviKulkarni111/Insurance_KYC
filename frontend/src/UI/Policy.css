@@ -1,0 +1,44 @@
+/* Reset margins and paddings */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Sections */
+  .section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 50px 0;
+  }
+  
+  .section-blue {
+    background: rgb(65,105,225);
+    background: linear-gradient(159deg, rgba(65,105,225,1) 0%, rgba(137,207,240,1) 100%);
+  }
+  
+  
+  .section-gray {
+
+    background-color: #2d3436;
+    background-image: linear-gradient(315deg, #2d3436 0%, #d3d3d3 74%);
+      }
+  
+  .section-green {
+    background: rgb(62,180,137);
+    background: linear-gradient(159deg, rgba(62,180,137,1) 0%, rgba(144,238,144,1) 100%);  }
+  
+  .section-orange {
+    background-color: #f07654;
+    background-image: linear-gradient(315deg, #f07654 0%, #f5df2e 74%);  }
+  
+  /* Image */
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
