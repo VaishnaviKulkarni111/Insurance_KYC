@@ -67,7 +67,7 @@ const Products = () => {
                     src={product.image}
                     alt={product.name}
                     fluid
-                    style={{ height: "150px", objectFit: "cover" }}
+                    style={{ height: "150px", objectFit: "cover", cursor:"pointer"}}
                   />
                   <h5 className="mt-3">{product.name}</h5>
                 </Card.Body>

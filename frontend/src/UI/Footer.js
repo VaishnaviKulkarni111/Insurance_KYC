@@ -107,7 +107,7 @@ const Footer =() =>{
       {/* Copyright Section */}
       <Col md={6} className="text-md-end text-center">
         <p className="mb-0">
-          &copy; {new Date().getFullYear()} Your Insurance Company. All rights
+          &copy; {new Date().getFullYear()} VK's Insurance Company. All rights
           reserved.
         </p>
       </Col>

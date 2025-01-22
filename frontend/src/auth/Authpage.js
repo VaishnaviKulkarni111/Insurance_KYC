@@ -48,15 +48,43 @@ function Authpage() {
   };
 
   return (
-    <div className="d-flex vh-100 bg-#F0F0F0 ">
+    <div className="d-flex vh-100 bg-light">
       <div className="container my-auto">
-        <div className="row justify-content-center">
+        <div className="row align-items-center">
+          {/* Left Section: Informative Content */}
+          <div className="col-md-6 d-none d-md-block">
+            <div className="info-section p-4">
+              <h2 className="text-primary fw-bold mb-3">
+                Why Choose Our Insurance Platform?
+              </h2>
+              <p className="text-muted">
+                Enjoy a seamless onboarding experience with our user-friendly platform:
+              </p>
+              <ul className="list-unstyled text-muted">
+                <li>
+                  <strong>✔️ Fast KYC Verification:</strong> Get approved in minutes.
+                </li>
+                <li>
+                  <strong>✔️ 24/7 Support:</strong> Assistance whenever you need it.
+                </li>
+                <li>
+                  <strong>✔️ Comprehensive Policies:</strong> Choose from a variety of insurance plans tailored to your needs.
+                </li>
+              </ul>
+              <img
+                src="https://www.example.com/insurance-illustration.png"
+                alt="Insurance Illustration"
+                className="img-fluid mt-3"
+              />
+            </div>
+          </div>
+  
+          {/* Right Section: Authentication Form */}
           <div className="col-md-6">
             <div className="card shadow-lg p-4">
               <h1 className="card-title text-center mb-4">
                 {isLogin ? 'Welcome Back!' : 'Create an Account'}
               </h1>
-
               <form onSubmit={handleSubmit}>
                 {!isLogin && (
                   <div className="mb-3">
@@ -70,7 +98,7 @@ function Authpage() {
                     />
                   </div>
                 )}
-
+  
                 <div className="mb-3">
                   <input
                     type="email"
@@ -81,8 +109,7 @@ function Authpage() {
                     className="form-control"
                   />
                 </div>
-
-                {/* Mobile number input only for registration */}
+  
                 {!isLogin && (
                   <div className="mb-3">
                     <input
@@ -95,7 +122,7 @@ function Authpage() {
                     />
                   </div>
                 )}
-
+  
                 <div className="mb-3">
                   <input
                     type="password"
@@ -106,7 +133,7 @@ function Authpage() {
                     className="form-control"
                   />
                 </div>
-
+  
                 {!isLogin && (
                   <div className="mb-3">
                     <select
@@ -123,7 +150,7 @@ function Authpage() {
                     </select>
                   </div>
                 )}
-
+  
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
@@ -131,9 +158,9 @@ function Authpage() {
                 >
                   {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
                 </button>
-
+  
                 {error && <p className="text-danger text-center mt-2">{error}</p>}
-
+  
                 <p className="text-center mt-4">
                   {isLogin ? (
                     <>
@@ -166,6 +193,7 @@ function Authpage() {
       </div>
     </div>
   );
+  
 }
 
 export default Authpage;

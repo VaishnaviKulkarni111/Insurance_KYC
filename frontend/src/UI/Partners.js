@@ -12,12 +12,12 @@ const Partners = () => {
       alt: "Yes Bank",
     },
     {
-      src: "https://www.maxlifeinsurance.com/static-page/assets/homepage/Adobe.webp",
-      alt: "Adobe",
+      src: "https://cdn.policyx.com/cms-media/magma-health-insurance-logo-web142-1727952862.webp",
+      alt: "Magma HDI",
     },
     {
-      src: "https://www.maxlifeinsurance.com/static-page/assets/homepage/Google.webp",
-      alt: "Google",
+      src: "https://seeklogo.com/images/L/liberty-insurance-logo-2C02301B14-seeklogo.com.png",
+      alt: "Libarty India",
     },
     {
         src: "https://joinditto.in/static/2ef89b7a1f6efbff596990cfc23a80e7/72740/logo.png",
@@ -36,8 +36,12 @@ const Partners = () => {
       alt: "Zerodha",
     },
     {
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzwdw5LRRgFpiRRMi-TsjpT2KUPYL8lutKMQ&s",
-        alt: "Wipro",
+        src: "https://etimg.etb2bimg.com/photo/91940133.cms",
+        alt: "Aditya birla ltd",
+      },
+      {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Max_Life_Insurance_logo.svg/2560px-Max_Life_Insurance_logo.svg.png",
+        alt: "Maxlife",
       },
     {
       src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Bajaj_Finserv_Logo.svg/2560px-Bajaj_Finserv_Logo.svg.png",
@@ -48,10 +52,7 @@ const Partners = () => {
       src: "https://1000logos.net/wp-content/uploads/2018/03/SBI-Logo.png",
       alt: "State Bank of India",
     },
-    {
-      src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Max_Life_Insurance_logo.svg/2560px-Max_Life_Insurance_logo.svg.png",
-      alt: "Maxlife",
-    },
+    
     
   ];
 

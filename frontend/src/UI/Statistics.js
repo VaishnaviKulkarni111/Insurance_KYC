@@ -47,7 +47,7 @@ const Statistics = () => {
 
   return (
     <Container className="py-5" style={{ overflow: "hidden", maxWidth: "100%" }}>
-      <h2 className="text-center mb-4">Why Prefer us???</h2>
+      <h2 className="text-center mb-4">This Trust says EVERYTHING !!!</h2>
       <div className="scroll-container">
         {/* Duplicate the content for infinite scrolling */}
         {[...stats, ...stats].map((stat, index) => (
